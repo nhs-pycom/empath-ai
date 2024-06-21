@@ -1,0 +1,70 @@
+{
+  "title": "Structured Response",
+  "description": "",
+  "parameters": {
+    "groundingPromptConfig": {
+      "disabled": true,
+      "groundingConfig": {
+        "sources": [
+          {
+            "type": "VERTEX_AI_SEARCH"
+          }
+        ]
+      }
+    },
+    "stopSequences": [],
+    "temperature": 0.9,
+    "tokenLimits": 2493,
+    "topP": 0.95
+  },
+  "type": "structured",
+  "context": "I’m running a session for medical students about breaking news to patients. Given a topic, design a scenario.",
+  "inputPrefixes": [
+    ""
+  ],
+  "outputPrefixes": [
+    ""
+  ],
+  "examples": [
+    {
+      "inputs": [
+        "Placenta Praevia"
+      ],
+      "outputs": [
+        "{\"Custom\": \"Sarah is attending her 20-week anatomy scan and has been found to have placenta praevia. This means she is unlikely to be able to have a natural delivery. Inform Sarah of this finding and what this means for her pregnancy.\"}"
+      ]
+    },
+    {
+      "inputs": [
+        "Breast Cancer Diagnosis"
+      ],
+      "outputs": [
+        "{\"Custom\": \"Mary, a 45-year-old woman, has just had a biopsy of a lump in her breast. The results have come back positive for breast cancer. Discuss the diagnosis with Mary, explain the next steps, and provide support for her emotional reaction.\"}"
+      ]
+    },
+    {
+      "inputs": [
+        "Type 1 Diabetes in Child"
+      ],
+      "outputs": [
+        "{\"Custom\": \"John and Emily's 8-year-old son, Michael, has been experiencing excessive thirst and frequent urination. Blood tests confirm that Michael has Type 1 Diabetes. Inform the parents about the diagnosis, what it means for Michael's lifestyle, and how they can manage his condition.\"}"
+      ]
+    },
+    {
+      "inputs": [
+        "Alzheimer's Disease Diagnosis"
+      ],
+      "outputs": [
+        "{\"Custom\": \"Eleanor, a 70-year-old woman, has been experiencing memory loss and confusion. After a series of tests, she has been diagnosed with early-stage Alzheimer's disease. Inform Eleanor and her family of the diagnosis, what they can expect, and discuss the available treatment options and support resources.\"}"
+      ]
+    }
+  ],
+  "testData": [
+    {
+      "inputs": [
+        "Parents died in car crash"
+      ]
+    }
+  ],
+  "model": "gemini-1.5-flash-001"
+}
