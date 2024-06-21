@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="images/logo1.png" alt="empath.ai">
+  <img src="images/logo.png" alt="empath.ai">
 </p>
 
 Empath.ai is a patient conversation simulator developed to train clinicians in delivering difficult news to patients. Using large language models (LLMs), it creates diverse patient scenarios and integrates the UCLMS Mark Scheme for Breaking Bad News to provide constructive feedback. This approach helps students identify areas for improvement and enhance their communication skills in sensitive situations.
