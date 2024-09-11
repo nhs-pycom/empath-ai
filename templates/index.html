@@ -1,0 +1,72 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>empath.ai, powered by Gemini</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+        <p>Empath.ai is a patient conversation simulator developed to train clinicians in delivering difficult news to patients. Using large language models (LLMs), it creates diverse patient scenarios and integrates the UCLMS Mark Scheme for breaking bad news to provide constructive feedback.</p>
+        
+        <div id="scenario-container">
+            <select id="scenario-select">
+                <option value="" disabled selected>Select a scenario</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+
+        <div id="custom-scenario" style="display: none;">
+            <input type="text" id="custom-scenario-input" placeholder="Describe your custom scenario here...">
+            <button id="generate-scenario-btn">Generate Scenario</button>
+        </div>
+
+        <div id="scenario-display"></div>
+
+        <!-- Flex container wrapping chatbot and additional content -->
+        <div class="content-wrapper"> 
+            <div class="chatbot-container">
+                <div id="mode-selector">
+                    <select id="interaction-mode">
+                        <option value="text-to-text">Text-to-Text</option>
+                        <option value="voice-to-voice">Voice-to-Voice</option>
+                    </select>
+                </div>   
+
+                <div class="chat-window" id="chat-window">
+                    <!-- Chat messages will be appended here via JavaScript -->
+                </div>
+
+                <!-- Text input container (default) -->
+                <div class="input-container text-input-container">
+                    <input type="text" id="chat-input" placeholder="Your response" />
+                    <button id="send-btn">Send</button>
+                </div>
+
+                <!-- Voice input container (hidden by default) -->
+                <div class="input-container voice-input-container" style="display: none;">
+                    <button id="mic-btn">
+                        <i class="fa fa-microphone" style="font-size: 20px; color: fff;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Additional content to the right -->
+            <div class="additional-content">
+                <!-- Add your additional content here -->
+                <p>Evaluation content goes here.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Visit our <a href="https://github.com/nhs-pycom/empath-ai" target="_blank" rel="noopener noreferrer">GitHub</a> for more info.</p>
+    </footer>
+</body>
+</html>

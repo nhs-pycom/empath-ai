@@ -1,6 +1,4 @@
-streamlit
-numpy
-pandas
-plotly
-vertexai
-ipykernel
+Flask==3.0.3
+langchain_core==0.2.39
+langchain_google_vertexai==1.0.10
+protobuf==5.28.0
