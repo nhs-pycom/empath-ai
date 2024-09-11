@@ -12,7 +12,7 @@ To get started with empath.ai, follow these steps:
 
 There are a few steps to this and some familiarity with Google Cloud is assumed:
 
-1. Create a [Google Cloud project](https://cloud.google.com/cloud-console) and enable the [Vertex AI APIs](https://cloud.google.com/vertex-ai/generative-ai/docs/start/quickstarts/quickstart-multimodal). 
+1. Create a [Google Cloud project](https://cloud.google.com/cloud-console). 
 
 2. Enable the Cloud Text-to-Speech API and the Vertex AI API within your created project.
 
