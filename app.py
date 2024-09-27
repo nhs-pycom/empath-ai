@@ -12,6 +12,10 @@ tts_client = texttospeech.TextToSpeechClient()
 def home():
     return render_template('index.html')
 
+@app.route('/rubric')
+def rubric():
+    return render_template('rubric.html')
+
 @app.route('/chat', methods=['POST'])
 def chat():
     """
@@ -44,16 +48,28 @@ def chat():
     # Get the right model for this use-case
     agent = Agent(scenario=scenario_dict['Scenario'], persona=scenario_dict['Persona'])
     agent_response = agent.chat(agent_state=AgentState(q, message_history, world_state))
+    agent_world_state = agent.evaluate(agent_state=AgentState(q, message_history, world_state))
 
     # Check if mode is voice-to-voice and generate audio if needed
     mode = request.json.get("mode")
     if mode == 'voice-to-voice':
         synthesis_input = texttospeech.SynthesisInput(text=agent_response.content)
-        voice = texttospeech.VoiceSelectionParams(
-            language_code="en-US", ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
-        )
+
+        if scenario_dict['Gender'] == "Female":
+            voice = texttospeech.VoiceSelectionParams(
+                language_code="en-US",
+                name="en-GB-Standard-C",
+                ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
+            )
+        else:
+            voice = texttospeech.VoiceSelectionParams(
+                language_code="en-US",
+                name="en-GB-Standard-D",
+                ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
+            )
+
         audio_config = texttospeech.AudioConfig(
-            audio_encoding=texttospeech.AudioEncoding.MP3
+            audio_encoding=texttospeech.AudioEncoding.LINEAR16
         )
         response = tts_client.synthesize_speech(
             input=synthesis_input, voice=voice, audio_config=audio_config
@@ -64,10 +80,15 @@ def chat():
         audio_base64 = base64.b64encode(audio_bytes).decode('utf-8')
         
         # Return both the text response and audio in base64 format
-        return jsonify({"response": agent_response.content, "audio": audio_base64}), 200
+        return jsonify({
+            "response": agent_response.content, 
+            "world_state": agent_world_state,
+            "audio": audio_base64}), 200
     else:
         # Return the chat response without audio
-        return jsonify({"response": agent_response.content}), 200
+        return jsonify({
+            "response": agent_response.content,
+            "world_state": agent_world_state}), 200
 
 def build_message_history(message_hist_json):
     """

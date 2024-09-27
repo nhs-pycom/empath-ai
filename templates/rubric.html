@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>empath.ai, powered by Gemini</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+        <h2>Marking Rubric</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Section</th>
+                    <th>Requirement</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Section 1 -->
+                <tr>
+                    <td>Professional Introduction</td>
+                    <td>Introduces self with full name and role; verifies the patient’s name.</td>
+                    <td id="introducesSelfWithFullNameAndRole">0 / 1</td>
+                </tr>
+
+                <!-- Section 2 -->
+                <tr>
+                    <td>Building Rapport and Sharing News</td>
+                    <td>Establishes rapport by beginning with an open-ended question.</td>
+                    <td id="establishesRapportWithOpenEndedQuestion">0 / 2</td>
+                </tr>
+
+                <!-- Section 3 -->
+                <tr>
+                    <td>Understanding the Situation and Delivering News</td>
+                    <td>Confirms the patient’s current understanding of the situation.</td>
+                    <td id="confirmsPatientUnderstandingOfSituation">0 / 1</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Secures patient consent and provides a summary of the situation so far.</td>
+                    <td id="securesPatientConsentAndProvidesSummary">0 / 2</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Inquires if the patient would like a companion present.</td>
+                    <td id="inquiresIfPatientWantsCompanionPresent">0 / 1</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Provides a warning before sharing bad news.</td>
+                    <td id="providesWarningBeforeSharingBadNews">0 / 1</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Effectively communicates bad news and investigation results.</td>
+                    <td id="effectivelyCommunicatesBadNews">0 / 2</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Uses pauses to allow the patient time to process the information.</td>
+                    <td id="usesPausesToAllowProcessing">0 / 2</td>
+                </tr>
+                <!-- Section 4 -->
+                <tr>
+                    <td>Communication Techniques</td>
+                    <td>Recognizes and addresses the patient’s emotions and concerns.</td>
+                    <td id="addressesPatientEmotionsAndConcerns">0 / 2</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Determines what the patient wants to know and how much detail they need.</td>
+                    <td id="determinesPatientWantsToKnow">0 / 2</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Offers reassurance without creating false hope.</td>
+                    <td id="offersReassuranceWithoutFalseHope">0 / 2</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Demonstrates empathy both verbally and through body language.</td>
+                    <td id="demonstratesEmpathy">0 / 1</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Avoids medical jargon.</td>
+                    <td id="avoidsMedicalJargon">0 / 1</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Actively listens, picking up on and responding to cues from the patient.</td>
+                    <td id="activelyListensAndRespondsToCues">0 / 1</td>
+                </tr>
+                <tr>
+                    <td>Information Delivery</td>
+                    <td>Clearly explains the situation.</td>
+                    <td id="clearlyExplainsDiagnosisAndPrognosis">0 / 2</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Discusses the onward process and any future required investigations.</td>
+                    <td id="discussesReferralAndFurtherInvestigations">0 / 2</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Outlines options available in detail.</td>
+                    <td id="outlinesTreatmentOptions">0 / 2</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Encourages the patient to discuss the news with their family and offers support for follow-up appointments.</td>
+                    <td id="encouragesDiscussionWithFamily">0 / 1</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Offers councelling if appropriate</td>
+                    <td id="offersCounselingAsAppropriate">0 / 1</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Schedules follow-up if appropriate and provides relevant materials.</td>
+                    <td id="schedulesFollowUpAndProvidesInfo">0 / 2</td>
+                </tr>
+                <tr>
+                    <td>Concluding the Consultation</td>
+                    <td>Invites the patient to ask questions and provides contact information for future enquiries.</td>
+                    <td id="invitesQuestionsAndProvidesContact">0 / 2</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Summarises the discussion and confirms the patients understanding.</td>
+                    <td id="summarizesDiscussionAndConfirmsUnderstanding">0 / 2</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Ensures the patient is ready to leave and is safe to return home.</td>
+                    <td id="ensuresPatientIsReadyAndSafeToLeave">0 / 1</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Maintains a structured approach, clearly indicating changes in the conversation's focus.</td>
+                    <td id="maintainsStructuredApproach">0 / 2</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <footer>
+        <p>Visit our <a href="https://github.com/nhs-pycom/empath-ai" target="_blank" rel="noopener noreferrer">GitHub</a> for more info.</p>
+    </footer>
+</body>
+</html>

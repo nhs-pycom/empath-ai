@@ -7,7 +7,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-family: "Lexend Deca", sans-serif;
+    font-family: 'Montserrat', sans-serif;
     background-color: #f0f2f5;
 }
 
@@ -178,6 +178,23 @@ select, input[type="text"] {
     background-color: #acc4f4;
 }
 
+#end-btn {
+    padding: 0 20px;
+    margin-left: 0px;
+    background-color: #a4b4fc;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 50px;
+    display: center;
+    align-items: center;
+}
+
+#end-btn:hover {
+    background-color: #acc4f4;
+}
+
 button {
     padding: 10px 20px;
     background-color: #a4b4fc;
@@ -213,6 +230,17 @@ button:hover {
     background-color: #d4a5bc; /* Change background color when active */
 }
 
+/* Table styling */
+table, th, td {
+    border:  1px solid black;
+    border-collapse: collapse;
+    padding: 10px;
+    border-style: dotted;
+    font-size: 12px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
 /* Basic styling for the footer */
 footer {
     text-align: center;
@@ -228,4 +256,4 @@ footer a {
 
 footer a:hover {
     text-decoration: underline;
-}
+}  
