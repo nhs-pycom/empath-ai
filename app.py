@@ -122,4 +122,4 @@ def build_message_history(message_hist_json):
     return messages
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=8080)
