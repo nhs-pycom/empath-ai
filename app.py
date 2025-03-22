@@ -57,13 +57,13 @@ def chat():
 
         if scenario_dict['Gender'] == "Female":
             voice = texttospeech.VoiceSelectionParams(
-                language_code="en-GB",
-                name="en-GB-Wavenet-C",
+                language_code="en-gb",
+                name="en-GB-Chirp3-HD-Aoede",
             )
         else:
             voice = texttospeech.VoiceSelectionParams(
-                language_code="en-GB",
-                name="en-GB-Wavenet-D",
+                language_code="en-gb",
+                name="en-GB-Chirp3-HD-Charon",
             )
 
         audio_config = texttospeech.AudioConfig(
