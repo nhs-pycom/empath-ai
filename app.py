@@ -59,13 +59,15 @@ def chat():
 
         if scenario_dict['Gender'] == "Female":
             voice = texttospeech.VoiceSelectionParams(
-                language_code="en-us",
-                name="en-US-Journey-O", 
+                language_code="en-US",
+                name="en-GB-Standard-C",
+                ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
             )
         else:
             voice = texttospeech.VoiceSelectionParams(
-                language_code="en-us",
-                name="en-US-Journey-D",
+                language_code="en-US",
+                name="en-GB-Standard-D",
+                ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
             )
 
         audio_config = texttospeech.AudioConfig(
@@ -155,4 +157,4 @@ def build_message_history(message_hist_json):
     return messages
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    app.run(debug=True)
