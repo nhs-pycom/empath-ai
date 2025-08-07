@@ -23,7 +23,8 @@
         </div>
 
         <div id="custom-scenario" style="display: none;">
-            <input type="text" id="custom-scenario-input" placeholder="Describe your custom scenario here...">
+            <input type="text" id="custom-scenario-input" placeholder="Describe your scenario here...">
+            <input type="text" id="custom-persona-input" placeholder="Describe your persona here...">
             <button id="generate-scenario-btn">Generate Scenario</button>
         </div>
 
@@ -41,11 +42,12 @@
 
                 <div class="chat-window" id="chat-window">
                     <!-- Chat messages will be appended here via JavaScript -->
+                <div id="spinner" class="spinner" style="display:none;"></div>
                 </div>
 
                 <!-- Text input container (default) -->
                 <div class="input-container text-input-container">
-                    <input type="text" id="chat-input" placeholder="Your response" />
+                    <textarea id="chat-input" placeholder="Your response"></textarea>
                     <button id="send-btn">Send</button>
                 </div>
 
@@ -59,10 +61,19 @@
 
             <!-- Additional content to the right -->
             <div class="additional-content">
-                <!-- Add your additional content here -->
-                <p><b>Evaluation Section</b></p>
-                <button id="end-btn">End Scenario and Evaluate</button>
+
+                <!-- <div class="emotion-content">
+                    <p><b>Patient's Emotion:</b></p>
+                    <p class="emoji"></p>
+                </div> -->
+
+                <div class="evaluation-content">
+                    <p><b>Evaluation Section</b></p>
+                    <button id="end-btn">End Scenario and Evaluate</button>
+                    <button id="download-transcript-btn">Download Transcript</button>
+                </div>
             </div>
+            
         </div>
     </div>
 

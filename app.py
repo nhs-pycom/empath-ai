@@ -39,8 +39,9 @@ def chat():
     message_history = build_message_history(message_hist_json)
 
     # World State
-    world_state_json = request.args.get("world_state")
-    world_state = json.loads(world_state_json) if world_state_json else None
+    # world_state_json = request.args.get("world_state")
+    # world_state = json.loads(world_state_json) if world_state_json else None
+    world_state = None
 
     # Directly retrieve scenario and persona from the request
     scenario_dict = request.json.get("selectedScenario")
@@ -48,7 +49,8 @@ def chat():
     # Get the right model for this use-case
     agent = Agent(scenario=scenario_dict['Scenario'], persona=scenario_dict['Persona'])
     agent_response = agent.chat(agent_state=AgentState(q, message_history, world_state))
-    agent_world_state = agent.evaluate(agent_state=AgentState(q, message_history, world_state))
+    # message_history.append(AIMessage(agent_response.content))
+    # agent_sentiment = agent.sentiment(agent_state=AgentState(message=None, message_history=message_history, world_state=None))
 
     # Check if mode is voice-to-voice and generate audio if needed
     mode = request.json.get("mode")
@@ -57,15 +59,13 @@ def chat():
 
         if scenario_dict['Gender'] == "Female":
             voice = texttospeech.VoiceSelectionParams(
-                language_code="en-US",
-                name="en-GB-Standard-C",
-                ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
+                language_code="en-us",
+                name="en-US-Journey-O", 
             )
         else:
             voice = texttospeech.VoiceSelectionParams(
-                language_code="en-US",
-                name="en-GB-Standard-D",
-                ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
+                language_code="en-us",
+                name="en-US-Journey-D",
             )
 
         audio_config = texttospeech.AudioConfig(
@@ -82,13 +82,44 @@ def chat():
         # Return both the text response and audio in base64 format
         return jsonify({
             "response": agent_response.content, 
-            "world_state": agent_world_state,
             "audio": audio_base64}), 200
+            #"sentiment": agent_sentiment}), 200
     else:
         # Return the chat response without audio
         return jsonify({
-            "response": agent_response.content,
-            "world_state": agent_world_state}), 200
+            "response": agent_response.content}), 200
+            #"sentiment": agent_sentiment}), 200
+    
+@app.route('/evaluate', methods=['POST'])
+def evaluate():
+    """
+    Handles evaluation requests from the client.
+
+    Receives a POST request with a JSON payload containing the user's
+    message, message history, scenario, and persona details. It uses the EmpathAI Agent 
+    to generate a response based on the given input.
+
+    Returns:
+        - A JSON response containing the agent's textual response.
+
+    Raises:
+        ValueError: If the request data is malformed or incomplete.
+    """
+    # Message History
+    message_hist_json = request.json.get("history")
+    message_history = build_message_history(message_hist_json)
+
+    # Directly retrieve scenario and persona from the request
+    scenario_dict = request.json.get("selectedScenario")
+
+    # Get the right model for this use-case
+    agent = Agent(scenario=scenario_dict['Scenario'], persona=scenario_dict['Persona'])
+    print(message_history)
+    agent_world_state = agent.evaluate(agent_state=AgentState(message=None, message_history=message_history, world_state=None))
+ 
+    # Return both the text response
+    return jsonify({
+        "world_state": agent_world_state}), 200
 
 def build_message_history(message_hist_json):
     """
@@ -124,4 +155,4 @@ def build_message_history(message_hist_json):
     return messages
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8080)

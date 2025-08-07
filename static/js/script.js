@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(scenarios => {
             const scenarioSelect = document.getElementById('scenario-select');
             const customScenarioInput = document.getElementById('custom-scenario-input');
+            const customPersonaInput = document.getElementById('custom-persona-input');
             const customScenarioDiv = document.getElementById('custom-scenario');
             const generateScenarioBtn = document.getElementById('generate-scenario-btn');
             const scenarioDisplay = document.getElementById('scenario-display'); // Element to display the scenario text
@@ -46,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (scenarioSelect.value === 'Custom') {
                     requestedScenario['Scenario'] = customScenarioInput.value;
+                    requestedScenario['Persona'] = customPersonaInput.value;
                     // You could add more custom fields if necessary
                 } else {
                     requestedScenario = scenarios[scenarioSelect.value];
@@ -55,13 +57,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('Generating scenario for:', requestedScenario);
 
                 // Simulate a response (replace with actual logic)
-                const generatedScenario = `Generated scenario based on ${requestedScenario['Scenario']}.`;
+                const generatedScenario = `${requestedScenario['Scenario']}`;
 
                 // Display the results (This is where you would update the UI)
                 console.log(generatedScenario);
 
                 // Display the generated scenario and persona
                 scenarioDisplay.textContent = `${generatedScenario}`;
+
+                // Store the selected scenario in the global state variable
+                selectedScenario = requestedScenario;
             });
 
             // Function to display the scenario text
@@ -94,6 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let teacherResponse;
 
     function getResponse(data) {
+
+        // Show the spinner before sending the request
+        const spinner = document.getElementById('spinner');
+        spinner.style.display = 'block';
+
         fetch('/chat', {
             method: 'POST',
             headers: {
@@ -105,11 +115,11 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             const aiResponse = data.response;
-            teacherResponse = data.world_state;
             appendMessage('patient', aiResponse);
 
             // Add the AI's response to the conversation history
             conversationHistory.push({ author: 'patient', content: aiResponse });
+            // emojiElement.textContent = data.sentiment
 
             // Check if there is audio data and play it
             if (data.audio) {
@@ -118,8 +128,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 audio.play().catch(error => console.error('Audio playback error:', error));
             }
 
+            // Hide the spinner after the response is received
+            spinner.style.display = 'none';
+
             // Return latest evaluation
         })
+        .catch(error => {
+            console.error('Error:', error);
+
+            // Hide the spinner in case of error
+            spinner.style.display = 'none';
+        });
+    }
+
+    function getEvaluation(data) {
+        fetch('/evaluate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+
+        })
+        .then(response => response.json())
+        .then(data => {
+            teacherResponse = data.world_state;
+            })
         .catch(error => {
             console.error('Error:', error);
         });
@@ -129,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatWindow = document.getElementById('chat-window');
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
+    const emojiElement = document.querySelector('.emoji');
     
     let conversationHistory = '';
 
@@ -138,7 +173,15 @@ document.addEventListener('DOMContentLoaded', () => {
         messageElement.classList.add(role);
         messageElement.textContent = content;
         chatWindow.appendChild(messageElement);
-        chatWindow.scrollTop = chatWindow.scrollHeight;  // Auto-scroll to bottom
+        // Move the spinner to the bottom after appending a message
+        const spinner = document.getElementById('spinner');
+        chatWindow.appendChild(spinner);
+
+        // Add a slight delay to ensure the spinner is fully appended to the DOM
+        setTimeout(() => {            
+            // Scroll to the very bottom, including the spinner's height
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }, 0);
     }
 
     sendBtn.addEventListener('click', function () {
@@ -175,6 +218,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const endBtn = document.getElementById('end-btn');
 
     endBtn.addEventListener('click', function () {
+        // Send the conversation history to the back-end
+        getEvaluation({
+            history: JSON.stringify(conversationHistory),  // Convert conversationHistory to a JSON string
+            selectedScenario: selectedScenario
+        });
+
         if (teacherResponse) {
             // Open the rubric HTML file in a new window
             const scoringWindow = window.open('/rubric', '', 'width=800,height=600');
@@ -218,6 +267,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 scoringWindow.document.getElementById('maintainsStructuredApproach').textContent = `${teacherResponse.maintainsStructuredApproach} / 1`;
             };
         }
+    });
+
+    // Function to convert conversation history to CSV
+    function convertToCSV(conversation) {
+        const headers = ['Author', 'Message'];  // CSV headers
+        const rows = conversation.map(entry => [entry.author, entry.content]);
+
+        // Combine headers and rows
+        let csvContent = [headers, ...rows].map(row => row.join(',')).join('\n');
+        return csvContent;
+    }
+
+    // Function to trigger the download
+    function downloadCSV(csvContent, fileName) {
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.setAttribute('href', url);
+        a.setAttribute('download', fileName);
+        a.click();
+        URL.revokeObjectURL(url);  // Clean up URL reference
+    }
+
+    // Download transcript logic
+    const downloadTranscriptBtn = document.getElementById('download-transcript-btn');
+
+    downloadTranscriptBtn.addEventListener('click', function () {
+        const csvContent = convertToCSV(conversationHistory);
+        downloadCSV(csvContent, 'conversation_transcript.csv');
     });
 
     // Microphone button logic

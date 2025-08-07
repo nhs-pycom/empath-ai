@@ -1,7 +1,7 @@
 import unittest
 from agents import AgentState
 from empathai_agent import Agent
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, AIMessage
 
 class TestAgentChat(unittest.TestCase):
     """Unit test for the Agent class chat functionality."""
@@ -30,6 +30,18 @@ class TestAgentChat(unittest.TestCase):
         """Test that the chat method returns a valid response."""
         # Invoke the chat method to get a response from the agent
         response = self.agent.chat(self.agent_state)
+
+        # Print the response to see the output (for debugging)
+        print("Agent Response:", response)
+
+        # Check that the response is not None (you can add more specific assertions as needed)
+        self.assertIsNotNone(response, "The agent's response should not be None.")
+
+    def test_sentiment_analysis(self):
+        self.message_history.append(self.initial_message.content)
+        self.message_history.append("My symptoms are a runny nose, and I'm feeling terrible")
+
+        response = self.agent.sentiment(AgentState(message=None, message_history = self.message_history, world_state = {}))
 
         # Print the response to see the output (for debugging)
         print("Agent Response:", response)

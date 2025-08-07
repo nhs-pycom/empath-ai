@@ -1,15 +1,21 @@
 from .agents import AgentState, AgentResponse, ConversationalAgent
 from langchain_core.prompts import PromptTemplate
 from langchain_core.messages import SystemMessage
-from langchain_google_vertexai import ChatVertexAI, VertexAI
+from langchain.chat_models import AzureChatOpenAI
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.exceptions import OutputParserException
 from langchain_core.pydantic_v1 import BaseModel, Field
 import math
-import vertexai
+from dotenv import load_dotenv
+import os
 
-# Initialize Vertex AI with your project and location
-vertexai.init(project="gen-lang-client-0023142649", location="us-central1")
+# Load environment variables from .env file
+load_dotenv()
+
+# Constants
+ENDPOINT_URL = os.getenv("ENDPOINT_URL")
+DEPLOYMENT_NAME = os.getenv("DEPLOYMENT_NAME")
+AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 
 # Template for setting up the agent's persona in conversations and the teacher model used for evaluating student performance.
 PERSONA_SYSTEM_PROMPT = """
@@ -143,11 +149,20 @@ class Agent(ConversationalAgent):
             persona: A string describing the patient persona that the agent should embody.
         """
         # Initialize chat model for persona responses
-        self.chat_model = ChatVertexAI(model="gemini-1.5-flash")
+        self.chat_model = AzureChatOpenAI(azure_endpoint=ENDPOINT_URL, 
+                        api_key=AZURE_OPENAI_API_KEY, 
+                        azure_deployment=DEPLOYMENT_NAME, 
+                        api_version="2024-05-01-preview")
         # Initialize teacher model for evaluation purposes
-        self.teacher_model = VertexAI(model_name="gemini-1.5-flash", temperature=0)
+        self.teacher_model = AzureChatOpenAI(azure_endpoint=ENDPOINT_URL, 
+                        api_key=AZURE_OPENAI_API_KEY, 
+                        azure_deployment=DEPLOYMENT_NAME, 
+                        api_version="2024-05-01-preview")
         # Initialize sentiment analysis model for analysis purposes
-        self.sentiment_analysis_model = VertexAI(model_name="gemini-1.5-flash", temperature=0)
+        self.sentiment_analysis_model = AzureChatOpenAI(azure_endpoint=ENDPOINT_URL, 
+                        api_key=AZURE_OPENAI_API_KEY, 
+                        azure_deployment=DEPLOYMENT_NAME, 
+                        api_version="2024-05-01-preview")
 
         # Store scenario and persona attributes
         self.scenario = scenario
